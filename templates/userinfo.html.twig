@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+<div class="table-responsive col-md-6 container">
+  
+ <table class="table table-striped table-bordered">
+ <tr>
+ <th>Id</th>
+ <td>{{ user.id }}</td>
+ </tr>
+ <tr>
+ <th>First Name</th>
+ <td>{{ user.name }}</td>
+ </tr>
+ <tr>
+ <th>E-mail</th>
+ <td>{{ user.email }}</td> </tr>
+ <tr>
+ <tr>
+ <th>Gender</th>
+ <td>{{ user.gender }}</td> </tr>
+ <tr>
+ <th>Status</th>
+ <td>{{ user.status }}</td> </tr>
+ </table>
+ <form method="POST">
+                    <a href="/edituser/id/{{ user.id }}" class="btn btn-primary">Edit</a>
+                    <a href="{{ path('deleteuser', { 'id': user.id })     }}" class="btn btn-danger" onclick=" return confirm('Are You sure want to delete {{ user.name }}?')">Delete</a>
+ </form>
+   
+ </div>
+
+{% endblock %} 

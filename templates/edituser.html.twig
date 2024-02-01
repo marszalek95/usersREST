@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+{% if message != NULL %}
+{% if message['alert'] == true %}
+<div class="container col-sm-4 alert alert-danger">
+{{ message['message'] }}
+</div>
+{% elseif message['alert'] == false %}
+<div class="container col-sm-4 alert alert-success">
+{{ message['message'] }}
+</div>
+{% endif %}
+{% endif %}
+<div class="container col-sm-4">
+    
+    {{ form_start(user_form) }}
+    {{ form_widget(user_form) }}
+
+    <input type="submit" class="btn btn-dark" value="Edit"/>
+    {{ form_end(user_form) }}
+    
+</div>
+{% endblock %} 
