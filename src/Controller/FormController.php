@@ -7,24 +7,21 @@ use App\Form\UserType;
 use App\Controller\UserController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 class FormController extends AbstractController
 {
-    /**
-     *@Route("/adduser",  name="adduser")
-     */
-    public function addUserForm(Request $request)
+    #[Route('/adduser', name: 'adduser')]
+    public function addUserForm(Request $request): Response
     {
         $user = new User();
-        $message = [];
 
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted())
-        {
+        if($form->isSubmitted()) {
             $result_arr = [
                 'name' => $user->name,
                 'email' => $user->email,
@@ -32,33 +29,29 @@ class FormController extends AbstractController
                 'status' => $user->status,
                 
             ];
-            $result_arr;
 
             $usercontroller = new UserController();
             $meta = $usercontroller->addUser($result_arr);
-            if($meta['code'] == 201)
-            {
-                $message = ['alert' => false, 'message' => 'User added succesfully!'];
+
+            if($meta['code'] == 201) {
+                $this->addFlash('success', 'User created successfully!');
             }
-            else
-            {
-                $message = ['alert' => true, 'message' => $meta['code']];
+            else {
+                $this->addFlash('fail', 'Something went wrong');
             }
+                     
+            return $this->redirectToRoute('userinfo', ['id' => $meta['data']['id']]);
         }
 
         return $this->render('adduser.html.twig', [
-            'user_form' => $form->createView(),
-            'message' => $message
+            'form' => $form,
         ]);
     }
 
-    /**
-     *@Route("/edituser/id/{id}",  name="edituser")
-     */
+    #[Route('/edituser/id/{id}', name: 'edituser')]
     public function editUserForm(Request $request, $id)
     {
         $user = new User();
-        $message = [];
 
         $usercontroller = new UserController();
         $userdata = $usercontroller->idUser($id);
@@ -66,12 +59,13 @@ class FormController extends AbstractController
 
         $user->name = $userdata['data']['name'];
         $user->email = $userdata['data']['email'];
+        $user->gender = $userdata['data']['gender'];
+        $user->status = $userdata['data']['status'];
         $form = $this->createForm(UserType::class, $user);
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted())
-        {
+        if($form->isSubmitted()) {
             $result_arr = [
                 'name' => $user->name,
                 'email' => $user->email,
@@ -82,20 +76,19 @@ class FormController extends AbstractController
            
             $usercontroller = new UserController();
             $meta = $usercontroller->editUser($result_arr, $id);
-            if($meta['code'] == 200)
-            {
-                $message = ['alert' => false, 'message' => 'User updatet succesfully!'];
+            if($meta['code'] == 200) {
+                $this->addFlash('success', 'User updated successfully!');
             }
-            else
-            {
-                $message = ['alert' => true, 'message' => $meta['code']];
+            else {
+                $this->addFlash('fail', 'Something went wrong');
             }
+
+            return $this->redirectToRoute('userinfo', ['id' => $id]);
 
         }
 
         return $this->render('edituser.html.twig', [
             'user_form' => $form->createView(),
-            'message' => $message
         ]);
     }
     

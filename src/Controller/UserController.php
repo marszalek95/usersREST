@@ -7,6 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Response;
 use App\Controller\FormController;
+use Symfony\Component\BrowserKit\Request;
 
 class UserController extends AbstractController
 {
@@ -28,10 +29,6 @@ class UserController extends AbstractController
         }
 
         #[Route('/search/query/{query}/{page}', name: 'search', requirements: ['page' => '\d+'])]
-        /**
-         * @Route("/search/query/{query}/page/{page<[1-9]\d*>}", defaults={"_format"="html"}, methods={"GET"}, name="search_paginated")
-         * @Route("/search", defaults={"page": "1", "_format"="html"}, methods={"GET"}, name="search")
-         */
         public function findUsers($query, int $page = 1): Response
         {
             $url = "https://gorest.co.in/public-api/users?name={$query}&_format=json&access-token=6d62432c63d380689db6029841266954fa8bc4c2af2a183c0cf27b0365c1dab2";
@@ -49,11 +46,8 @@ class UserController extends AbstractController
             ]);         
         }
 
-        /**
-         * @Route("/userinfo/id/{id}", defaults={"_format"="html"}, methods={"GET"}, name="userinfo")
-         * 
-         */
-        public function infoUsers($id)
+        #[Route('/userinfo/id/{id}', name: 'userinfo')]
+        public function infoUser(int $id): Response
         {
         
             $response_arr = $this->idUser($id);
@@ -61,13 +55,12 @@ class UserController extends AbstractController
             return $this->render('userinfo.html.twig', 
             [
                 'user' => $response_arr['data'],
-                'meta' => $response_arr['meta']['pagination'],
             ]);         
         }
 
-        public function idUser($id)
+        public function idUser(int $id)
         {
-            $url = "https://gorest.co.in/public-api/users/{$id}?&_format=json&access-token=PlWJ9sxUSB5XiFj--yGSNYJi1r46ZUefNUfW";
+            $url = "https://gorest.co.in/public-api/users/{$id}?&_format=json&access-token=6d62432c63d380689db6029841266954fa8bc4c2af2a183c0cf27b0365c1dab2";
 
             $client = HttpClient::create();
 
@@ -111,10 +104,7 @@ class UserController extends AbstractController
             return $response_arr;
         }
 
-        /**
-         * @Route("/UserController/delete/{id}", name="deleteuser")
-         * 
-         */
+        #[Route('/deleteuser/id/{id}', name: 'deleteuser')]
         public function deleteUser($id)
         {
             $url = "https://gorest.co.in/public-api/users/{$id}";
@@ -127,12 +117,10 @@ class UserController extends AbstractController
             ]);
             
             $response_arr = $response->toArray();
-            if($response_arr['code'] == 204)
-            {
+            if($response_arr['code'] == 204) {
                 $this->addFlash('success', 'User deleted successfully!');
             }
-            else
-            {
+            else {
                 $this->addFlash('fail', 'Something went wrong');
             }
 

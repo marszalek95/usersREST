@@ -3,69 +3,65 @@
   {% block body %}
   <!-- Page Content -->
   <main>
-  <div class="row">
-  <div class="container">
-        {% for message in app.flashes('success') %}
-            <div class="alert alert-success">
-                {{ message }}
-            </div>
-        {% endfor %}
+    <div class="container">
+          {% for message in app.flashes('success') %}
+              <div class="alert alert-success">
+                  {{ message }}
+              </div>
+          {% endfor %}
 
-        {% for message in app.flashes('fail') %}
-            <div class="alert alert-danger">
-                {{ message }}
-            </div>
-        {% endfor %}
+          {% for message in app.flashes('fail') %}
+              <div class="alert alert-danger">
+                  {{ message }}
+              </div>
+          {% endfor %}
 
-      <table class="table table-hover col-md-12">
-        <thead>
-          <tr>
-            <th scope="col">id</th>
-            <th scope="col">First Name</th>
-            <th scope="col">Last Name</th>
-            <th scope="col">Email</th>
-          </tr>
-        </thead>
-            <tbody>
-              {% for user in users %}
-              <tr>
-                <td>{{ user.id }}</th>
-                <td>{{ user.name }}</td>
-                <td>{{ user.email }}</td>
-                <td>
-                <form method="POST">
-                  <a href="/userinfo/id/{{ user.id }}" class="btn btn-dark">Full Info</a>
-                  <a href="/edituser/id/{{ user.id }}" class="btn btn-primary">Edit</a>
-                  <a href="/deleteuser/id/ {{ user.id }}" class="btn btn-danger" onclick=" return confirm('Are You sure want to delete {{ user.name }}?')">Delete</a>
-                  </form>
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-      </table>           
-    </div>
-    </div>
+        <table class="table table-hover col-md-12">
+          <thead>
+            <tr>
+              <th scope="col">id</th>
+              <th scope="col">First Name</th>
+              <th scope="col">Last Name</th>
+              <th scope="col">Email</th>
+            </tr>
+          </thead>
+              <tbody>
+                {% for user in users %}
+                <tr>
+                  <td>{{ user.id }}</th>
+                  <td>{{ user.name }}</td>
+                  <td>{{ user.email }}</td>
+                  <td>
+                  <form method="POST">
+                    <a href="/userinfo/id/{{ user.id }}" class="btn btn-dark">Full Info</a>
+                    <a href="/edituser/id/{{ user.id }}" class="btn btn-primary">Edit</a>
+                    <a href="/deleteuser/id/ {{ user.id }}" class="btn btn-danger" onclick=" return confirm('Are You sure want to delete {{ user.name }}?')">Delete</a>
+                    </form>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+        </table>           
+      </div>
 
   </main>
   {% if meta['pages'] > 0 %}
   <div class="d-flex justify-content-center col-md-12">
-  <ul class="pagination">
-    {% if meta['page'] > 1 %}
-    <li class="page-item"><a class="page-link" href="/users/page/{{(meta['page'] - 1)}}">Previous</a></li>
-    {% endif %}
-    {% for i in meta['page']..(meta['page'] + 2) %}
-    {% if i < meta['pages'] %}
-    <li class="page-item"><a class="page-link" href="/users/page/{{i}}">{{i}}</a></li>
-    {% endif %}
-    {% endfor %}
-    {% if meta['page'] < meta['pages'] %}
-    <li class="page-item"><a class="page-link" href="/users/page/{{(meta['page'] + 1)}}">Next</a></li>
-    {% endif %}
-  </ul>
+    <ul class="pagination">
+      {% if meta['page'] > 1 %}
+      <li class="page-item"><a class="page-link" href="/users/page/{{(meta['page'] - 1)}}">Previous</a></li>
+      {% endif %}
+      {% for i in meta['page']..(meta['page'] + 2) %}
+      {% if i < meta['pages'] %}
+      <li class="page-item"><a class="page-link" href="/users/page/{{i}}">{{i}}</a></li>
+      {% endif %}
+      {% endfor %}
+      {% if meta['page'] < meta['pages'] %}
+      <li class="page-item"><a class="page-link" href="/users/page/{{(meta['page'] + 1)}}">Next</a></li>
+      {% endif %}
+    </ul>
   </div>
   {% endif %}
-
-
 
   {% endblock %}
 

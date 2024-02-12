@@ -1,6 +1,4 @@
-{{ form_start(search_form, {
-    'attr': {'class': 'navbar-form', 'action': path('handleSearch')}
-}) }}
+{{ form_start(search_form) }}
 
 {{ form_widget(search_form.search, {
     'attr': {'class': 'form-control search-query', 'placeholder': 'Search name'}
